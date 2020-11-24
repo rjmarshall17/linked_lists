@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 class Node:
@@ -13,6 +14,24 @@ class SinglyLinkedList:
     def __init__(self):
         self.head = None
         self.size = 0
+        self.__current_node__ = None
+        self.__next_node__ = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        # print('cur=%s next=%s' % (self.__current_node__, self.__next_node__))
+        if self.__current_node__ is None:
+            self.__current_node__ = self.head
+            self.__next_node__ = self.__current_node__.next
+        else:
+            if self.__next_node__ is None:
+                self.__current_node__ = None
+                raise StopIteration
+            self.__current_node__ = self.__next_node__
+            self.__next_node__ = self.__current_node__.next
+        return self.__current_node__.value
 
     def append(self, node):
         if not isinstance(node, Node):
@@ -108,6 +127,16 @@ class SinglyLinkedList:
     def __len__(self):
         return self.size
 
+    def reverse(self):
+        previous_node = None
+        current_node = self.head
+        while current_node is not None:
+            next_node = current_node.next
+            current_node.next = previous_node
+            previous_node = current_node
+            current_node = next_node
+        self.head = previous_node
+
 
 if __name__ == '__main__':
     zero = Node("0")
@@ -142,7 +171,7 @@ if __name__ == '__main__':
     # linkedList.remove("3")
     # print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
     # print("="*20)
-
+    #
     # linkedList = SinglyLinkedList()
     # linkedList.append(one)
     # linkedList.append(two)
@@ -171,3 +200,6 @@ if __name__ == '__main__':
     print("The number of elements in the list is: %d and they are: %s" % (len(linkedList), linkedList.getList()))
     linkedList.remove_nth_node_from_end(4)
     print("The number of elements in the list is: %d and they are: %s" % (len(linkedList), linkedList.getList()))
+    linkedList.reverse()
+    print("The reversed linked list is: %s" % linkedList.getList())
+
