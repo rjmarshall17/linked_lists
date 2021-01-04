@@ -1,0 +1,195 @@
+Singly Linked List:
+-------------------
+class Node
+    __init__ function parameters: self, value
+        self.value = value
+        self.next = None
+
+class SinglyLinkedList
+    __init__ function parameters: None
+        self.head = None
+        self.size = 0
+
+    append function parameters: node
+        if node is not a Node instance
+            raise ValueError
+        node.next <- None
+        if self.head is None
+            self.head <- node
+        else
+            last node <- result of call to find at position with nothing
+            last node.next <- node
+        self.size += 1
+
+    insert function parameters: node, position (default is 1)
+        if node is not a Node instance
+            raise ValueError
+        if self.head is None
+            self.head = node
+            self.head.next = None
+        else if position == 1
+            node.next <- self.head
+            self.head <- node
+        else if position == self.size
+            call append with node
+        else
+            current <- result of call to find at position with position if position <= 0 else position - 1
+            node.next <- current
+            current.next <- node
+        self.size += 1
+
+    remove function parameters: value with default set to None
+        if value is None
+            raise ValueError
+        if self.size <= 0
+            return True
+        node <- self.head
+        prev <- None
+        loop while node is not None
+            if node.value == value
+                if prev is None
+                    self.head <- self.head.next
+                else
+                    prev.next <- node.next
+                self.size -= 1
+            prev <- node
+            node <- node.next
+
+    remove nth node from end function parameters: n
+        s <- self.head
+        f <- self.head
+        c <- 1
+        loop while c <= n
+            c += 1
+            s = s.next
+
+        if s is None
+            self.head.value <- self.head.next.value
+            self.head.next <- self.head.next.next
+        else
+            loop while s.next is not None
+                s <- s.next
+                f <- f.next
+            f.next <- f.next.next
+        self.size -= 1
+
+    find at position function parameters: position with default set to 1
+        if position < 0
+            position <- self.size
+        if position == 1
+            return self.head
+        node <- self.head
+        count <- 1
+        loop while node.next is not None
+            if count >= position
+                exit loop
+            node = node.next
+            count += 1
+        return node
+
+    get list function parameters: self
+        ret <- empty list
+        node <- self.head
+        loop while node is not None
+            append node.value to ret
+            node <- node.next
+        return ret
+
+    __len__ function parameters: self
+        return self.size
+
+Doubly Linked List:
+-------------------
+class Node
+    __init__ function parameters: self, value
+        self.value <- value
+        self.prev <- None
+        self.next <- None
+
+class doublyLinkedList
+    __init__ function parameters: self
+        self.head = None
+        self.tail = None
+
+    setHead function parameters: self, node
+        if self.head is None
+            self.head <- node
+            self.tail <- node
+        else
+            call insertBefore with self.head, node
+
+    setTail function parameters: self, node
+        if self.tail is None
+            call setHead with node
+        else
+            call insertAfter with self.tail, node
+
+    insertBefore function parameters: self, node, node to insert
+        if node to insert == self.head and node to insert == self.tail
+            return
+        call remove with node to insert
+        node to insert .prev <- node.prev
+        node to insert .next <- node
+        if node.prev is None
+            self.head <- node to insert
+        else
+            node.prev.next <- node to insert
+        node.prev <- node to insert
+
+    insertAfer function parameters: self, node, node to insert
+        if node to insert == self.head and node to insert == self.tail
+            return
+        call remove with node to insert
+        node to insert.prev <- node
+        node to insert.next <- node.next
+        if node.next is None
+            self.tail <- node to insert
+        else
+            node.next.prev <- node to insert
+        node.next <- node to insert
+
+    insertAtPosition function parameters: self, position, node to insert
+        if position == 1
+            call setHead with node to insert
+            return
+        node <- self.head
+        current position <- 1
+        loop while node is not None and current position != position
+            node <- node.next
+            current position += 1
+        if node is not None
+            call insertBefore with node, node to insert
+        else
+            call setTail with node to insert
+
+    removeNodesWithValue function parameters: self, value
+        for node in getNodesWithValue with value
+            remove node
+
+    getNodesWithValue function parameters: self, value
+        node <- self.head
+        ret <- empty list
+        loop while node is not None
+            if node.value == value
+                append node to ret
+            node <- node.next
+        return ret
+
+    remove function parameters: self, node
+        if node == self.head
+            self.head <- self.head.next
+        if node == self.tail
+            self.tail <- self.tail.prev
+        call removeNodeBindings with node
+
+    containsNodeWithValue parameters: self, value
+        nodes <- call getNodesWithValue with value
+        return length of nodes > 0
+
+    removeNodeBindings parameters: self, node
+        if node.prev is not None
+            node.prev.next <- node.next
+        if node.next is not None
+            node.next.prev <- node.prev
+        node.prev <- None
+        node.next <- None
