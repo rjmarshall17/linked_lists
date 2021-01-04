@@ -1,34 +1,54 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 class Node:
-    def __init__(self,value=None):
+    def __init__(self, value=None):
         self.value = value
         self.next = None
-        
+
     def __repr__(self):
-        return "value: %s next=%s" % (self.value,"None" if self.next is None else self.next.value)
+        return "value: %s next=%s" % (self.value, "None" if self.next is None else self.next.value)
+
 
 class SinglyLinkedList:
     def __init__(self):
         self.head = None
         self.size = 0
-        
-    def append(self,node):
-        if not isinstance(node,Node):
+        self.__current_node__ = None
+        self.__next_node__ = None
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        # print('cur=%s next=%s' % (self.__current_node__, self.__next_node__))
+        if self.__current_node__ is None:
+            self.__current_node__ = self.head
+            self.__next_node__ = self.__current_node__.next
+        else:
+            if self.__next_node__ is None:
+                self.__current_node__ = None
+                raise StopIteration
+            self.__current_node__ = self.__next_node__
+            self.__next_node__ = self.__current_node__.next
+        return self.__current_node__.value
+
+    def append(self, node):
+        if not isinstance(node, Node):
             raise ValueError("append: Node required but not found")
-            
-        node.next = None            
+
+        node.next = None
         if self.head is None:
             self.head = node
         else:
             lastNode = self.__find_at_position__()
             lastNode.next = node
         self.size += 1
-    
-    def insert(self,node,position=1):
-        if not isinstance(node,Node):
+
+    def insert(self, node, position=1):
+        if not isinstance(node, Node):
             raise ValueError("insert: Node required but not found")
-        
+
         if self.head is None:
             self.head = node
             self.head.next = None
@@ -44,8 +64,8 @@ class SinglyLinkedList:
             node.next = current.next
             current.next = node
         self.size += 1
-    
-    def remove(self,value=None):
+
+    def remove(self, value=None):
         if value is None:
             raise ValueError("A value is required")
         if self.size <= 0:
@@ -62,7 +82,7 @@ class SinglyLinkedList:
             prev = node
             node = node.next
 
-    def remove_nth_node_from_end(self,n):
+    def remove_nth_node_from_end(self, n):
         s = self.head
         f = self.head
         c = 1
@@ -73,7 +93,7 @@ class SinglyLinkedList:
         if s is None:
             self.head.value = self.head.next.value
             self.head.next = self.head.next.next
-            
+
         else:
             while s.next is not None:
                 s = s.next
@@ -81,7 +101,7 @@ class SinglyLinkedList:
             f.next = f.next.next
         self.size -= 1
 
-    def __find_at_position__(self,position=-1):
+    def __find_at_position__(self, position=-1):
         if position < 0:
             position = self.size
         if position == 1:
@@ -92,9 +112,9 @@ class SinglyLinkedList:
             if count >= position:
                 break
             node = node.next
-            count += 1            
+            count += 1
         return node
-    
+
     def getList(self):
         ret = []
         node = self.head
@@ -103,9 +123,20 @@ class SinglyLinkedList:
             ret.append(node.value)
             node = node.next
         return ret
-    
+
     def __len__(self):
         return self.size
+
+    def reverse(self):
+        previous_node = None
+        current_node = self.head
+        while current_node is not None:
+            next_node = current_node.next
+            current_node.next = previous_node
+            previous_node = current_node
+            current_node = next_node
+        self.head = previous_node
+
 
 if __name__ == '__main__':
     zero = Node("0")
@@ -121,7 +152,7 @@ if __name__ == '__main__':
     eight = Node("8")
     nine = Node("9")
     ten = Node("10")
-    
+
     # linkedList = SinglyLinkedList()
     # print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
     # linkedList.append(one)
@@ -140,7 +171,7 @@ if __name__ == '__main__':
     # linkedList.remove("3")
     # print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
     # print("="*20)
-
+    #
     # linkedList = SinglyLinkedList()
     # linkedList.append(one)
     # linkedList.append(two)
@@ -154,7 +185,7 @@ if __name__ == '__main__':
     # print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
     # linkedList.insert(eight,5)
     # print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
-    
+
     linkedList = SinglyLinkedList()
     linkedList.append(zero)
     linkedList.append(one)
@@ -166,7 +197,9 @@ if __name__ == '__main__':
     linkedList.append(seven)
     linkedList.append(eight)
     linkedList.append(nine)
-    print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))
+    print("The number of elements in the list is: %d and they are: %s" % (len(linkedList), linkedList.getList()))
     linkedList.remove_nth_node_from_end(4)
-    print("The number of elements in the list is: %d and they are: %s" % (len(linkedList),linkedList.getList()))  
-        
+    print("The number of elements in the list is: %d and they are: %s" % (len(linkedList), linkedList.getList()))
+    linkedList.reverse()
+    print("The reversed linked list is: %s" % linkedList.getList())
+

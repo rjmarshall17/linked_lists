@@ -2,6 +2,7 @@
 
 import sys
 
+
 # This is an input class. Do not edit.
 class Node:
     def __init__(self, value):
@@ -14,6 +15,7 @@ class Node:
                                              self.prev.value if self.prev is not None else "None",
                                              self.next.value if self.next is not None else "None")
 
+
 # Feel free to add new properties and methods to the class.
 class DoublyLinkedList:
     def __init__(self):
@@ -25,13 +27,13 @@ class DoublyLinkedList:
             self.head = node
             self.tail = node
         else:
-            self.insertBefore(self.head,node)
+            self.insertBefore(self.head, node)
 
     def setTail(self, node):
         if self.tail is None:
             self.setHead(node)
         else:
-            self.insertAfter(self.tail,node)
+            self.insertAfter(self.tail, node)
 
     def insertBefore(self, node, nodeToInsert):
         if nodeToInsert == self.head and nodeToInsert == self.tail:
@@ -69,7 +71,7 @@ class DoublyLinkedList:
             node = node.next
             currentPosition += 1
         if node is not None:
-            self.insertBefore(node,nodeToInsert)
+            self.insertBefore(node, nodeToInsert)
         else:
             self.setTail(nodeToInsert)
 
@@ -77,7 +79,7 @@ class DoublyLinkedList:
         for node in self.getNodesWithValue(value):
             self.remove(node)
 
-    def getNodesWithValue(self,value):
+    def getNodesWithValue(self, value):
         node = self.head
         ret = []
         while node is not None:
@@ -85,7 +87,7 @@ class DoublyLinkedList:
                 ret.append(node)
             node = node.next
         return ret
-    
+
     def remove(self, node):
         # print("remove: About to remove: %s" % node)
         if node == self.head:
@@ -98,7 +100,7 @@ class DoublyLinkedList:
         nodes = self.getNodesWithValue(value)
         return len(nodes) > 0
 
-    def removeNodeBindings(self,node):
+    def removeNodeBindings(self, node):
         if node.prev is not None:
             node.prev.next = node.next
             # print("removeNodeBindings: node.prev=%s" % node.prev)
@@ -107,7 +109,8 @@ class DoublyLinkedList:
             # print("removeNodeBindings: node.next=%s" % node.next)
         node.prev = None
         node.next = None
-        
+
+
 def getNodeValuesHeadToTail(linkedList):
     values = []
     node = linkedList.head
@@ -115,7 +118,8 @@ def getNodeValuesHeadToTail(linkedList):
         values.append(node.value)
         node = node.next
     return values
-        
+
+
 def getNodeValuesTailToHead(linkedList):
     values = []
     node = linkedList.tail
@@ -126,6 +130,7 @@ def getNodeValuesTailToHead(linkedList):
         node = node.prev
     return values
 
+
 def bindNodes(nodeOne, nodeTwo):
     nodeOne.next = nodeTwo
     nodeTwo.prev = nodeOne
@@ -133,7 +138,8 @@ def bindNodes(nodeOne, nodeTwo):
     # print("nodeOne is: %s" % nodeOne)
     # print("nodeTwo is: %s" % nodeTwo)
     # print("="*20)
-    
+
+
 if __name__ == '__main__':
     linkedList = DoublyLinkedList()
     one = Node(1)
@@ -158,17 +164,17 @@ if __name__ == '__main__':
     linkedList.head = one
     linkedList.tail = five
 
-    assert getNodeValuesHeadToTail(linkedList) == [1, 2, 3, 4, 5],"1 failed"
-    assert getNodeValuesTailToHead(linkedList) == [5, 4, 3, 2, 1],"2 failed"
-    
+    assert getNodeValuesHeadToTail(linkedList) == [1, 2, 3, 4, 5], "1 failed"
+    assert getNodeValuesTailToHead(linkedList) == [5, 4, 3, 2, 1], "2 failed"
+
     linkedList.setHead(four)
-    
+
     print("Head to tail: %s" % getNodeValuesHeadToTail(linkedList))
     print("Tail to head: %s" % getNodeValuesTailToHead(linkedList))
     sys.stdout.flush()
-    
-    assert getNodeValuesHeadToTail(linkedList) == [4, 1, 2, 3, 5],"1 failed"
-    assert getNodeValuesTailToHead(linkedList) == [5, 3, 2, 1, 4],"2 failed"
+
+    assert getNodeValuesHeadToTail(linkedList) == [4, 1, 2, 3, 5], "1 failed"
+    assert getNodeValuesTailToHead(linkedList) == [5, 3, 2, 1, 4], "2 failed"
 
     linkedList.setTail(six)
     assert getNodeValuesHeadToTail(linkedList) == [4, 1, 2, 3, 5, 6]
@@ -223,4 +229,3 @@ if __name__ == '__main__':
     # self.assertEqual(getNodeValuesTailToHead(linkedList), [6, 5, 1, 4])
 
     # self.assertEqual(linkedList.containsNodeWithValue(5), True)
-
